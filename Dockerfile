@@ -15,10 +15,14 @@ RUN sed -i 's/^#\s*\(deb.*main restricted\)$/\1/g' /etc/apt/sources.list \
         curl \
         vim-tiny \
         tar \
+        xdg-utils \
+        wget \
+        xz-utils \
     && apt-get dist-upgrade -y --no-install-recommends -o Dpkg::Options::="--force-confold" \
     && locale-gen en_US \
     && update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 \
-    && curl -s -L "https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz" | tar xz -C / \
+    && curl -s -L "https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.1/s6-overlay-amd64.tar.gz" | tar xz -C / \
+    && ln -s /usr/bin/sh /bin/sh \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
