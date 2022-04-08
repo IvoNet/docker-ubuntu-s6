@@ -22,10 +22,12 @@ RUN sed -i 's/^#\s*\(deb.*main restricted\)$/\1/g' /etc/apt/sources.list \
     && apt-get dist-upgrade -y --no-install-recommends -o Dpkg::Options::="--force-confold" \
     && locale-gen en_US \
     && update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 \
-    && curl -s -L "https://github.com/just-containers/s6-overlay/releases/download/v3.1.0.1/s6-overlay-noarch.tar.xz" | tar xz -C / \
-    && curl -s -L "https://github.com/just-containers/s6-overlay/releases/download/v3.1.0.1/s6-overlay-$TARGETARCH.tar.gz" | tar xz -C / \
-    && ln -s /usr/bin/sh /bin/sh \
+    && curl -s -L "https://github.com/just-containers/s6-overlay/releases/download/v3.1.0.1/s6-overlay-noarch.tar.xz" -o /tmp/s6-overlay-noarch.tar.xz \
+    && tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz \
+    && curl -s -L "https://github.com/just-containers/s6-overlay/releases/download/v3.1.0.1/s6-overlay-$(uname -m).tar.xz" -o /tmp/s6-overlay-$(uname -m).tar.xz \
+    && tar -C / -Jxpf /tmp/s6-overlay-$(uname -m).tar.xz \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/*
 
 ENTRYPOINT ["/init"]
